@@ -6,6 +6,7 @@ public:
     void encode();
     void show(string window);
     Mat *getImg();
+    void save();
 private:
     Mat *img;
     char *url;

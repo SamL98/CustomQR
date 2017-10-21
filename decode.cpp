@@ -19,7 +19,7 @@ char* Decoder::decodeCorner(int row, int col) {
         while (n < i+4 && m < j+4) {
             Vec3b pixel = this->img.at<Vec3b>(n, m);
 
-            vals[counter] = pixel.val[0];
+            vals[counter] = (pixel.val[0] + pixel.val[1] + pixel.val[2])/3;
             counts[counter] = counts[counter] + 1;
 
             m++;
@@ -39,6 +39,7 @@ char* Decoder::decodeCorner(int row, int col) {
         }
 
         char c = (char) vals[maxCountIndex];
+        //cout << c << endl;;
 
         j += 6;
         if (j >= col+16) {

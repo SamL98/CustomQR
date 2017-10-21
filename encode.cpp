@@ -88,3 +88,7 @@ void Encoder::show(string window) {
 Mat *Encoder::getImg() {
     return this->img;
 }
+
+void Encoder::save() {
+    imwrite("./encoded.jpg", *(this->img));
+}
