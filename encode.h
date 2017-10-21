@@ -1,20 +1,15 @@
-#include "/usr/local/include/opencv2/core/core.hpp"
-#include "/usr/local/include/opencv2/highgui/highgui.hpp"
-#include <iostream>
-#include <cstring>
-
-using namespace std;
-using namespace cv;
+#include "main.h"
 
 class Encoder {
 public:
     Encoder(Mat *img, char *url);
     void encode();
     void show(string window);
+    Mat *getImg();
 private:
     Mat *img;
     char *url;
-    void setAllChannels(int row int col)
+    void setAllChannels(int row, int col, int val);
     void drawCorner(int row, int col);
     void encodeCorner(int row, int col, int strPos);
 };
