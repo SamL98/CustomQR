@@ -52,6 +52,7 @@ Point2f findCorner(Mat *img, int type) {
 }
 
 int main(int argc, char **argv) {
+    
     if (argc < 2) {
         cout << "Invalid number of args" << endl;
         return 1;
@@ -73,7 +74,8 @@ int main(int argc, char **argv) {
     //namedWindow("Test");
     //encoder.show("Test");
 
-    /*VideoCapture camera;
+    /*
+    VideoCapture camera;
     camera.open(0);
     if (!camera.isOpened()) {
       cerr << "ERROR: Could not access the camera or video!" << endl;
@@ -96,11 +98,12 @@ int main(int argc, char **argv) {
         imshow("Scanner", cameraFrame);
         
         if (waitKey(20) == 'a') break;
-    }*/
+    }
+    */
 
     //Decoder decoder(&cameraFrame);
     //decoder.decode();
-
+    
     Mat test = imread("./test3.jpg");
     resize(test, test, Size(400, 400), 0, 0, CV_INTER_LINEAR);
 
@@ -119,12 +122,13 @@ int main(int argc, char **argv) {
     dstSrc.push_back(findCorner(&test, 3));
 
     cout << dstSrc << endl;
-
-    Mat homo = findHomography(ptsSrc, dstSrc);
+    
+    
+    Mat homo = findHomography(ptsSrc, dstSrc, 0, 3, noArray());
 
     //test.convertTo(test, CV_32F);
     //homo.convertTo(homo, CV_32F);
-
+    
     Mat out;
     warpPerspective(test, out, homo, Size(400, 400));
 
@@ -136,4 +140,51 @@ int main(int argc, char **argv) {
 
     waitKey(0);
     destroyAllWindows();
+
+    
+
+    //Andy's Last Ditch Effort At Realigning Image
+    /*
+    Mat inputImg = imread("./Homography.png");
+    Mat templateImg = imread("./mcdonalds.jpg");
+
+    Mat inputGray, templateGray;
+
+    cvtColor(inputImg, inputGray, CV_BGR2GRAY);
+    cvtColor(templateImg, templateGray, CV_BGR2GRAY);
+
+    Mat warp_matrix = Mat::eye(3, 3, CV_32F);
+
+    // Specify the number of iterations.
+    int number_of_iterations = 5000;
+
+    // Specify the threshold of the increment
+    // in the correlation coefficient between two iterations
+    double termination_eps = 1e-10;
+
+    // Define termination criteria
+    TermCriteria criteria (TermCriteria::COUNT+TermCriteria::EPS, 
+        number_of_iterations, termination_eps
+    );
+
+    findTransformECC(templateGray, 
+        inputGray, 
+        warp_matrix, 
+        MOTION_HOMOGRAPHY, 
+        criteria
+    );
+
+    Mat inputImgAligned;
+
+    warpPerspective(inputImg, inputImgAligned, warp_matrix, 
+        templateImg.size(),INTER_LINEAR + WARP_INVERSE_MAP
+    );
+
+    namedWindow("alignmentTest");
+
+    imshow("alignmentTest", inputImgAligned);
+
+    waitKey(0);
+    destroyAllWindows();
+    */
 }
